@@ -66,6 +66,7 @@
   }
   input,select,textarea,button{text-transform:uppercase;}
   input::placeholder,textarea::placeholder{text-transform:uppercase;}
+  .keep-case,.keep-case::placeholder{text-transform:none !important;}
   a{color:var(--spb-blue);}
 
   header.topbar{
@@ -1725,7 +1726,7 @@
       <div class="grid2">
         <div class="field">
           <label>Correo</label>
-          <input type="text" id="fCorreoCargue" placeholder="ejemplo@gmail.com; otro@sprbun.com">
+          <input type="text" id="fCorreoCargue" class="keep-case" placeholder="ejemplo@gmail.com; otro@sprbun.com">
         </div>
         <div class="field">
           <label>&nbsp;</label>
@@ -1734,7 +1735,7 @@
       </div>
       <div class="field" style="margin-top:10px;">
         <label>Texto del mensaje</label>
-        <textarea id="fCuerpoCargue" rows="12" style="width:100%;box-sizing:border-box;font-family:inherit;font-size:13px;padding:9px 10px;border:1px solid var(--line-strong);border-radius:7px;"></textarea>
+        <textarea id="fCuerpoCargue" class="keep-case" rows="12" style="width:100%;box-sizing:border-box;font-family:inherit;font-size:13px;padding:9px 10px;border:1px solid var(--line-strong);border-radius:7px;"></textarea>
         <p class="sub" style="margin:6px 0 0;font-size:12px;">
           Se rellenan solos con cada cargue: <b>{TT}</b>, <b>{operador}</b>, <b>{cc}</b>, <b>{origen}</b>, <b>{destino}</b>.
           <b>{TABLA}</b> marca dónde va la tabla de BL y cantidad (si la quitas, la tabla se agrega al final).
@@ -1744,7 +1745,7 @@
       </div>
       <div class="field" style="margin-top:10px;">
         <label>Firma que va al final del correo</label>
-        <textarea id="fFirmaCargue" rows="8" style="width:100%;box-sizing:border-box;font-family:inherit;font-size:13px;padding:9px 10px;border:1px solid var(--line-strong);border-radius:7px;"></textarea>
+        <textarea id="fFirmaCargue" class="keep-case" rows="8" style="width:100%;box-sizing:border-box;font-family:inherit;font-size:13px;padding:9px 10px;border:1px solid var(--line-strong);border-radius:7px;"></textarea>
       </div>
       <p class="empty-inline" id="correoCargueEstado"></p>
       </div>
@@ -6253,6 +6254,7 @@
   document.addEventListener('input', function(e){
     var el = e.target;
     if(!el || (el.tagName !== 'INPUT' && el.tagName !== 'TEXTAREA')) return;
+    if(el.classList && el.classList.contains('keep-case')) return;
     var t = (el.type || 'text').toLowerCase();
     if(t !== 'text' && t !== 'password' && t !== 'search' && t !== 'textarea') return;
     var up = el.value.toUpperCase();
