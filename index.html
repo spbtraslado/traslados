@@ -4511,7 +4511,7 @@
               ((tt.etapa || 'cargado') === 'cargado' && tt.salidaConfirmada === false
                 ? '<button type="button" class="btn btn-sm btn-confirmar-salida">Confirmar salida</button>' : '')+
               '<button type="button" class="btn danger btn-sm btn-reversar">Reversar</button>'+
-              '<button type="button" class="btn secondary btn-sm btn-liberar-carga">Liberar</button>'+
+              ((currentSession && currentSession.rol === 'operativo') ? '' : '<button type="button" class="btn secondary btn-sm btn-liberar-carga">Liberar</button>')+
             '</div>' : '')+
           '</div>';
       });
@@ -6472,4 +6472,3 @@
 </script>
 </body>
 </html>
-
