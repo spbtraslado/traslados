@@ -815,6 +815,7 @@
   .rol-badge.puerta1{background:#eaf6fc;color:#0a6a99;}
   .rol-badge.puerta2{background:#f3ecfb;color:#5b2d91;}
   .rol-badge.cbg3{background:#fdeee3;color:#a1520a;}
+  .rol-badge.almacenista{background:#e8f5ee;color:#176b3a;}
 
   ::-webkit-scrollbar{width:9px;height:9px;}
   ::-webkit-scrollbar-thumb{background:var(--line);border-radius:6px;}
@@ -1226,6 +1227,194 @@
   .lim-mark{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--ink);}
   .hr-wrap{overflow-x:auto;margin:6px 0;} .hr-wrap svg{display:block;}
   .comp-stamp{font-size:11px;color:var(--ink-soft);margin-top:4px;}
+
+  /* =====================================================================
+     REDISEÑO · layout ordenado y distribuido (solo estilos, sin tocar lógica)
+     ===================================================================== */
+  :root{
+    --gap:20px;
+    --surface:#f5f7fa;
+    --radius:14px;
+    --shadow:0 1px 2px rgba(16,40,64,.05), 0 4px 14px rgba(16,40,64,.05);
+  }
+  body{background:var(--surface) !important;}
+  html{background:var(--surface) !important;}
+
+  /* Contenedor */
+  main{max-width:none;padding:24px 1.5cm 80px;}
+
+  /* Pestañas: segmentadas, repartidas a todo el ancho */
+  .role-switch{
+    display:grid;
+    grid-auto-flow:column;
+    grid-auto-columns:1fr;
+    gap:4px;
+    padding:4px;
+    border:1px solid var(--line);
+    border-radius:12px;
+    background:#fff;
+    box-shadow:var(--shadow);
+    margin-bottom:var(--gap) !important;
+    overflow-x:auto;
+    scrollbar-width:none;
+  }
+  .role-switch::-webkit-scrollbar{display:none;}
+  .role-switch button{
+    padding:11px 14px;
+    border-radius:9px;
+    font-size:13px;
+    letter-spacing:.3px;
+  }
+  .role-switch button.active{box-shadow:0 2px 6px rgba(0,90,171,.28);}
+
+  /* Tarjetas: acento superior fino en vez de borde izquierdo grueso */
+  .panel{
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    padding:22px 24px;
+    margin-bottom:var(--gap);
+  }
+  .card-sec{border-left:1px solid var(--line);border-top:3px solid var(--acc);}
+  .panel h2,
+  .card-sec > h2{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin:0 0 16px;
+    padding-bottom:12px;
+    border-bottom:1px solid var(--line);
+    font-size:14px;
+    font-weight:700;
+    letter-spacing:.6px;
+    color:var(--spb-blue-dark);
+  }
+  .panel .sub{margin:-6px 0 16px;font-size:12.5px;line-height:1.5;}
+  .tabs-actions{float:right;margin:-4px 0 0 12px;}
+  .tabs-actions + h2{clear:none;}
+
+  /* Layout de dos columnas: TT | BL */
+  .prog-grid{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:var(--gap);
+    align-items:start;
+  }
+  .prog-col{min-width:0;display:flex;flex-direction:column;}
+  .prog-col > .panel:last-child{margin-bottom:var(--gap);}
+  @media (max-width:980px){ .prog-grid{grid-template-columns:1fr;gap:0;} }
+
+  /* Formularios: etiquetas e inputs uniformes */
+  .field{margin-bottom:14px;min-width:0;}
+  .field label{
+    display:block;
+    margin:0 0 6px;
+    font-size:11px;
+    font-weight:600;
+    letter-spacing:.5px;
+    color:var(--ink-soft);
+  }
+  input[type=text],input[type=number],input[type=date],input[type=password],
+  input[type=email],input[type=search],select,textarea{
+    width:100%;
+    min-height:42px;
+    padding:9px 12px;
+    font:inherit;
+    font-size:14px;
+    color:var(--ink);
+    background:#fff;
+    border:1px solid var(--line-strong);
+    border-radius:9px;
+    transition:border-color .15s, box-shadow .15s;
+  }
+  input:focus,select:focus,textarea:focus{
+    outline:none;
+    border-color:var(--spb-blue);
+    box-shadow:0 0 0 3px rgba(0,90,171,.14);
+  }
+  .btn{min-height:42px;border-radius:9px;}
+  .btn-row{gap:10px;margin-top:16px;}
+
+  /* Filas de captura dentro de columnas angostas */
+  .prog-col .tt-row-entry{
+    grid-template-columns:90px minmax(0,1fr) minmax(0,1fr);
+    gap:4px 12px;
+    align-items:end;
+  }
+  .prog-col .tt-row-entry > .field:nth-child(4),
+  .prog-col .tt-row-entry > .field:nth-child(5){grid-column:1 / -1;margin-bottom:0;}
+  .prog-col .item-row-entry{
+    grid-template-columns:minmax(0,1fr) 110px;
+    gap:4px 12px;
+    align-items:end;
+  }
+  .prog-col .item-row-entry > .field:nth-child(3),
+  .prog-col .item-row-entry > .field:nth-child(4){grid-column:1 / -1;margin-bottom:0;}
+  .prog-col .tt-row-entry > .field:nth-child(n+4) > label,
+  .prog-col .item-row-entry > .field:nth-child(n+3) > label{display:none;}
+  .prog-col .tt-row-entry > .field:nth-child(n+4) .btn,
+  .prog-col .item-row-entry > .field:nth-child(n+3) .btn{width:100%;}
+  @media (max-width:560px){
+    .prog-col .tt-row-entry{grid-template-columns:80px minmax(0,1fr);}
+    .prog-col .tt-row-entry > .field:nth-child(3){grid-column:1 / -1;}
+  }
+
+  /* Listas de TT / BL programados: separación clara entre ítems */
+  .prog-col .empty-inline{padding:18px;text-align:center;border:1px dashed var(--line-strong);border-radius:10px;background:var(--surface);}
+  .tt-programado-item{border-radius:10px;}
+
+
+  /* Tarjetas de programados: etapas del TT y avance de cantidades por BL */
+  .prog-col .tt-programado-item{align-items:flex-start;text-align:left;padding:14px 16px;gap:14px;}
+  .prog-col .tt-programado-item .info{flex:1;min-width:0;text-align:left;display:flex;flex-direction:column;gap:10px;}
+  .prog-col .tt-programado-item > div:last-child{flex-shrink:0;}
+  .pg-head{display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;font-size:13.5px;}
+  .pg-head .pg-name{color:var(--ink-soft);}
+  .pg-sub{display:flex;flex-direction:column;gap:8px;}
+  .pg-state{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;font-size:12px;color:var(--ink-soft);}
+  .pg-state b{color:var(--spb-blue-dark);}
+  .pg-etapas{display:flex;flex-wrap:wrap;gap:0;align-items:stretch;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#f4f6f8;}
+  .pg-chip{flex:1 1 0;min-width:64px;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.2;font-size:10px;font-weight:700;padding:6px 4px;border-right:1px solid var(--line);background:#f4f6f8;color:var(--ink-soft);text-align:center;}
+  .pg-chip:last-child{border-right:none;}
+  .pg-chip small{font-size:9.5px;font-weight:600;opacity:.9;min-height:11px;}
+  .pg-chip.done{background:#eef7f0;color:#1f7a45;}
+  .pg-chip.now{background:var(--spb-blue);color:#fff;}
+  .pg-nums{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;}
+  .pg-num{display:flex;flex-direction:column;align-items:flex-start;font-size:15px;font-weight:800;line-height:1.1;padding:7px 10px;border-radius:8px;border:1px solid var(--line);background:#f4f6f8;color:var(--ink);}
+  .pg-num small{font-size:9.5px;font-weight:700;letter-spacing:.4px;opacity:.75;margin-bottom:3px;}
+  .pg-num.ok{background:#eef7f0;border-color:#bfe3cb;color:#1f7a45;}
+  .pg-num.falta{background:#fff9e8;border-color:#f0d998;color:#8a6100;}
+  .pg-bar{height:7px;background:#e3e9ee;border-radius:7px;overflow:hidden;}
+  .pg-bar>div{height:100%;background:#2e9e5b;border-radius:7px;transition:width .4s;}
+  .pg-meta{font-size:12px;color:var(--ink-soft);}
+  .pg-meta b{color:var(--spb-blue-dark);}
+
+  /* Bloque de Excel de BL */
+  #excelBlBox{margin-top:16px !important;padding-top:16px !important;}
+
+  /* Cabecera: más aire y alineación */
+  header.topbar{padding-left:24px;padding-right:24px;}
+
+  /* Móvil */
+  @media (max-width:640px){
+    main{padding:14px 10px 70px;}
+    .panel{padding:16px 14px;margin-left:0;margin-right:0;border-radius:12px;margin-bottom:14px;border:1px solid var(--line);}
+    .card-sec{border-left:1px solid var(--line);}
+    .role-switch button{padding:10px 10px;font-size:12px;}
+    .tabs-actions{float:none;margin:0 0 10px;}
+    header.topbar{padding-left:12px;padding-right:12px;}
+  }
+
+  /* Nueva programación: Origen | Destino | Fecha | Excel BL en una fila */
+  .grid-prog{grid-template-columns:repeat(3,minmax(0,1fr)) auto;align-items:end;}
+  .grid-prog .field{margin-bottom:0;}
+  .field-excel .btn{white-space:nowrap;}
+  .excel-info{display:block;margin-top:6px;font-size:11px;color:var(--ink-soft);}
+  .excel-info:empty{display:none;}
+  @media (max-width:900px){ .grid-prog{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;} .grid-prog .field{margin-bottom:0;} .field-excel{grid-column:1 / -1;} .field-excel > label{display:none;} .field-excel .btn{width:100%;} }
+  @media (max-width:480px){ .grid-prog{grid-template-columns:1fr;} }
+  .bl-tag{color:#d97706;font-weight:800;letter-spacing:.3px;}
+  .bl-num{color:var(--spb-blue-dark);font-weight:700;}
 </style>
 </head>
 <body>
@@ -1261,8 +1450,6 @@
 
     <div class="role-switch" style="margin-bottom:16px;">
       <button id="tabCapturarBtn" class="active" type="button">Programar traslado</button>
-      <button id="tabProgramacionesBtn" type="button">Programaciones</button>
-      <button id="tabFlujoAdminBtn" type="button">Flujo</button>
       <button id="tabComportamientoBtn" type="button">Comportamiento</button>
     </div>
 
@@ -1271,7 +1458,7 @@
     <div class="panel card-sec sec-main">
       <h2>Nueva programación</h2>
 
-      <div class="grid3">
+      <div class="grid3 grid-prog">
         <div class="field">
           <label>Origen</label>
           <input type="text" id="fOrigen" placeholder="ej. TECNOBELL" value="TECNOBELL - BSE" />
@@ -1284,9 +1471,17 @@
           <label>Fecha de programación</label>
           <input type="date" id="fFecha" />
         </div>
+        <div class="field field-excel">
+          <label>&nbsp;</label>
+          <button class="btn ghost" id="btnCargarExcelBl" type="button">&#128196; Cargar Excel de BL</button>
+          <input type="file" id="fileExcelBl" accept=".xlsx,.xls,.csv" style="display:none;" />
+          <span class="excel-info" id="excelBlInfo"></span>
+        </div>
       </div>
     </div>
 
+    <div class="prog-grid">
+    <div class="prog-col">
     <div class="panel card-sec sec-tt">
       <h2>Vehículos (TT)</h2>
       <div id="ttEntryRow" class="tt-row tt-row-entry">
@@ -1318,6 +1513,8 @@
       <h2>TT programados <span class="tt-count" id="ttProgramadosCount">0</span></h2>
       <div id="ttProgramadosList" class="empty-inline">Aún no has programado ningún TT.</div>
     </div>
+    </div>
+    <div class="prog-col">
 
     <div class="panel card-sec sec-bl">
       <h2>BL y cantidad</h2>
@@ -1340,13 +1537,6 @@
         </div>
       </div>
 
-      <div id="excelBlBox" style="margin-top:12px;padding-top:12px;border-top:1px dashed var(--line);">
-        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
-          <button class="btn ghost" id="btnCargarExcelBl" type="button">&#128196; Cargar Excel de BL</button>
-          <input type="file" id="fileExcelBl" accept=".xlsx,.xls,.csv" style="display:none;" />
-          <span class="sub" id="excelBlInfo" style="margin:0;">Suma la columna Cargo Quantity por BL Nbr y los programa.</span>
-        </div>
-      </div>
 
     </div>
 
@@ -1354,37 +1544,11 @@
       <h2>BL programados <span class="tt-count" id="itemsProgramadosCount">0</span></h2>
       <div id="itemsProgramadosList" class="empty-inline">Aún no has programado ningún BL.</div>
     </div>
-
-    <div class="panel card-sec sec-fin">
-      <h2>Finalizar traslado</h2>
-      <div class="btn-row">
-        <button class="btn danger" id="btnFinalizarTraslado" type="button">Finalizar traslado</button>
-      </div>
+    </div>
     </div>
 
     </div>
 
-    <div id="tabProgramacionesContent" style="display:none;">
-      <div class="panel card-sec sec-main">
-        <div class="tabs-actions">
-          <button class="btn ghost" id="btnRefreshAdministradorProg" type="button">Actualizar</button>
-        </div>
-        <h2>Programaciones para hoy</h2>
-        <p class="sub">Lo mismo que ve Operativo, solo para consulta (sin poder cargar TT/BL desde aquí).</p>
-        <div id="listAdministradorProg"></div>
-      </div>
-    </div>
-
-    <div id="tabFlujoAdminContent" style="display:none;">
-      <div class="panel card-sec sec-tt">
-        <div class="tabs-actions">
-          <button class="btn ghost" id="btnRefreshFlujoAdmin" type="button">Actualizar</button>
-        </div>
-        <h2>Flujo de los TT</h2>
-        <p class="sub">En qué etapa va cada TT, cuánto duró cada paso, y el tiempo total acumulado en el ciclo.</p>
-        <div id="listFlujoAdmin"></div>
-      </div>
-    </div>
 
     <div id="tabComportamientoContent" style="display:none;">
       <div class="panel card-sec sec-tt">
@@ -1398,9 +1562,8 @@
 
   <!-- ================= VISTA OPERATIVO ================= -->
   <section id="viewOp" style="display:none;">
-    <div class="role-switch" style="margin-bottom:16px;">
+    <div class="role-switch" style="margin-bottom:16px;display:none;">
       <button id="tabOpProgramacionesBtn" class="active" type="button">Programaciones</button>
-      <button id="tabOpFlujoBtn" type="button">Flujo</button>
     </div>
     <div id="tabOpProgramacionesContent">
       <div class="panel card-sec sec-main">
@@ -1410,16 +1573,6 @@
         <h2>Programaciones para hoy</h2>
         <p class="sub">Estas son las solicitudes enviadas por Administración para programar el ingreso o salida de los TT.</p>
         <div id="listOp"></div>
-      </div>
-    </div>
-    <div id="tabOpFlujoContent" style="display:none;">
-      <div class="panel card-sec sec-tt">
-        <div class="tabs-actions">
-          <button class="btn ghost" id="btnRefreshFlujoOp" type="button">Actualizar</button>
-        </div>
-        <h2>Flujo de los TT</h2>
-        <p class="sub">En qué etapa va cada TT, cuánto duró cada paso, y el tiempo total acumulado en el ciclo.</p>
-        <div id="listFlujoOp"></div>
       </div>
     </div>
   </section>
@@ -1462,9 +1615,8 @@
 
   <!-- ================= VISTA CBG3 ================= -->
   <section id="viewCbg3" style="display:none;">
-    <div class="role-switch" style="margin-bottom:16px;">
+    <div class="role-switch" style="margin-bottom:16px;display:none;">
       <button id="tabCbg3ListaBtn" class="active" type="button">CBG3</button>
-      <button id="tabCbg3FlujoBtn" type="button">Flujo</button>
     </div>
     <div id="tabCbg3ListaContent">
       <div class="panel card-sec sec-tt">
@@ -1474,16 +1626,6 @@
         <h2>CBG3 — Llegada y descargue</h2>
         <p class="sub">TT en camino a cobertizo, y TT ya en cobertizo listos para descargar y quedar libres.</p>
         <div id="listCbg3"></div>
-      </div>
-    </div>
-    <div id="tabCbg3FlujoContent" style="display:none;">
-      <div class="panel card-sec sec-tt">
-        <div class="tabs-actions">
-          <button class="btn ghost" id="btnRefreshFlujoCbg3" type="button">Actualizar</button>
-        </div>
-        <h2>Flujo de los TT</h2>
-        <p class="sub">En qué etapa va cada TT, cuánto duró cada paso, y el tiempo total acumulado en el ciclo.</p>
-        <div id="listFlujoCbg3"></div>
       </div>
     </div>
   </section>
@@ -1523,6 +1665,7 @@
           <select id="uRol">
             <option value="administrador">Administrador</option>
             <option value="operativo">Operativo</option>
+            <option value="almacenista">Almacenista (Operativo + Quitar TT)</option>
             <option value="puerta1">Puerta 1</option>
             <option value="puerta2">Puerta 2</option>
             <option value="cbg3">CBG3 (llegada y libre)</option>
@@ -1803,6 +1946,7 @@
   function uid(prefix){
     return prefix + '_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2,7);
   }
+  function blTxt(bl){ return '<span class="bl-tag">BL</span> <span class="bl-num">'+esc(bl)+'</span>'; }
   function esc(s){
     return (s||'').toString().replace(/[&<>"']/g, function(c){
       return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
@@ -2342,8 +2486,29 @@
       var el = document.createElement('div');
       el.className = 'tt-programado-item';
       if(idx === itemEditIndex) el.style.borderColor = 'var(--spb-blue)';
+      var realBl = recActual ? (recActual.items||[]).find(function(i){ return i.bl === it.bl; }) : null;
+      var total = Number(it.cantidad) || 0;
+      var falta = realBl ? (realBl.restante != null ? Number(realBl.restante) : Number(realBl.cantidad)) : total;
+      falta = Math.max(0, Math.min(total, falta));
+      var movido = total - falta;
+      var pct = total ? Math.round(movido * 100 / total) : 0;
+      var enTT = [];
+      if(recActual){
+        (recActual.tts||[]).forEach(function(t){
+          ttLineas(t).forEach(function(l){ if(l.bl === it.bl && Number(l.cantidad) > 0) enTT.push('TT# '+esc(t.codigo)+': '+esc(l.cantidad)); });
+        });
+      }
       el.innerHTML =
-        '<div class="info"><b>Bl '+esc(it.bl)+'</b> - Cant. '+esc(it.cantidad)+'</div>'+
+        '<div class="info">'+
+          '<div class="pg-head"><b>'+blTxt(it.bl)+'</b></div>'+
+          '<div class="pg-nums">'+
+            '<span class="pg-num"><small>CANTIDAD</small>'+total+'</span>'+
+            '<span class="pg-num ok"><small>CARGADO</small>'+movido+'</span>'+
+            '<span class="pg-num falta"><small>FALTAN</small>'+falta+'</span>'+
+          '</div>'+
+          '<div class="pg-bar" title="'+pct+'% cargado"><div style="width:'+pct+'%"></div></div>'+
+          (enTT.length ? '<div class="pg-meta">En: <b>'+enTT.join(' &middot; ')+'</b></div>' : '')+
+        '</div>'+
         '<div style="display:flex;gap:6px;">'+
           '<button type="button" class="icon-btn btn-edit-item" title="Editar" style="color:var(--spb-blue);">&#9998;</button>'+
           '<button type="button" class="icon-btn btn-rm-item" title="Quitar">&times;</button>'+
@@ -2496,8 +2661,68 @@
     reader.readAsArrayBuffer(file);
   });
 
+  function pgRecActual(){
+    return (typeof lastRecords !== 'undefined' && lastRecords && currentRecordId)
+      ? lastRecords.find(function(r){ return r.id === currentRecordId; })
+      : null;
+  }
+  var PG_ORDEN = ['inicio_tt','cargado','sale_puerta1','entra_puerta2','llegada_cobertizo','fin'];
+  function pgRank(k){ return PG_ORDEN.indexOf(k); }
+  /* En qué punto del camino va un TT real (null = solo programado) */
+  function pgEtapaActual(real){
+    if(!real) return {key:null, txt:'Programado', cls:'libre-badge'};
+    if(real.estado === 'cargando') return {key:'cargado', txt:'En cargue', cls:'cargando'};
+    if(real.estado === 'cargado'){
+      var et = real.etapa || 'cargado';
+      if(et === 'cargado' && real.salidaConfirmada === false) return {key:'cargado', txt:'Cargado, falta confirmar salida', cls:'cargado'};
+      var t = {cargado:'Cargado, espera Puerta 1', sale_puerta1:'Salió Puerta 1', entra_puerta2:'Entró Puerta 2', llegada_cobertizo:'En Cobertizo'};
+      return {key:et, txt:t[et] || et, cls:'cargado'};
+    }
+    if(real.etapa === 'retorno') return {key:null, txt:'En retorno', cls:'cargando'};
+    if(ttEnZona(real)) return {key:'inicio_tt', txt:'En zona', cls:'cargando'};
+    return {key:null, txt:'Programado', cls:'libre-badge'};
+  }
+  function pgTimer(ms){
+    var sec = Math.max(0, Math.floor((Date.now() - ms) / 1000));
+    var h = Math.floor(sec / 3600), m = Math.floor((sec % 3600) / 60), x = sec % 60;
+    return (h ? h + ':' + pad(m) : m) + ':' + pad(x);
+  }
+  setInterval(function(){
+    document.querySelectorAll('.pg-live').forEach(function(el){ el.textContent = pgTimer(Number(el.dataset.ts)); });
+  }, 1000);
+  function pgEtapasHtml(real){
+    var cur = pgEtapaActual(real);
+    var rCur = cur.key ? pgRank(cur.key) : -1;
+    var tp = (real && real.tiempos) || {};
+    var pasos = pasosVisiblesDelCamino();
+    var chips = pasos.map(function(p, i){
+      var r = pgRank(p.key);
+      var cls = (rCur >= 0 && r < rCur) ? 'done' : (r === rCur ? 'now' : '');
+      if(p.key === 'fin' && real && real.estado === 'libre' && tp.libre) cls = 'done';
+      var ts = tp[p.key];
+      var hora = '';
+      if(ts){
+        hora = '<small>'+esc(fmtHora(ts))+'</small>';
+        if(cls === 'now'){
+          hora += '<small class="pg-live" data-ts="'+new Date(ts).getTime()+'">'+pgTimer(new Date(ts).getTime())+'</small>';
+        }else{
+          var sig = null;
+          for(var j = i + 1; j < pasos.length; j++){ if(tp[pasos[j].key]){ sig = tp[pasos[j].key]; break; } }
+          if(sig) hora += '<small>'+esc(fmtDuracion(new Date(ts).getTime(), new Date(sig).getTime()))+'</small>';
+        }
+      }
+      return '<span class="pg-chip '+cls+'">'+esc(p.label)+hora+'</span>';
+    }).join('');
+    return '<div class="pg-etapas">'+chips+'</div>';
+  }
+
   function renderTTProgramados(){
     scheduleAutoSync();
+    paintTTProgramados();
+  }
+
+  function paintTTProgramados(){
+    var rec = pgRecActual();
     document.getElementById('ttProgramadosCount').textContent = ttProgramados.length;
     ttProgramadosListEl.innerHTML = '';
     if(!ttProgramados.length){
@@ -2508,11 +2733,21 @@
       return;
     }
     ttProgramados.forEach(function(tt, idx){
+      var real = rec ? findTT(rec, tt.codigo) : null;
+      var cur = pgEtapaActual(real);
+      var lineas = real ? ttLineas(real) : [];
+      var carga = lineas.length
+        ? '<b>'+lineas.map(function(l){ return blTxt(l.bl)+' &times; '+esc(l.cantidad); }).join(', ')+'</b>'
+        : 'Sin carga todavía';
       var item = document.createElement('div');
       item.className = 'tt-programado-item';
       if(idx === ttEditIndex) item.style.borderColor = 'var(--spb-blue)';
       item.innerHTML =
-        '<div class="info"><b>TT# '+esc(tt.codigo)+'</b> - '+esc(tt.operador)+' - CC '+esc(tt.cc)+'</div>'+
+        '<div class="info">'+
+          '<div class="pg-head"><b>TT# '+esc(tt.codigo)+'</b><span class="pg-name">'+esc(tt.operador)+' &middot; CC '+esc(tt.cc)+'</span></div>'+
+          '<div class="pg-state"><span class="badge '+cur.cls+'">'+esc(cur.txt)+'</span></div>'+
+          pgEtapasHtml(real)+
+        '</div>'+
         '<div style="display:flex;gap:6px;">'+
           '<button type="button" class="icon-btn btn-edit-tt" title="Editar" style="color:var(--spb-blue);">&#9998;</button>'+
           '<button type="button" class="icon-btn btn-rm-tt" title="Quitar">&times;</button>'+
@@ -2603,7 +2838,7 @@
     renderItemsProgramados();
   }
 
-  document.getElementById('btnFinalizarTraslado').addEventListener('click', async function(){
+  var _btnFin = document.getElementById('btnFinalizarTraslado'); if(_btnFin) _btnFin.addEventListener('click', async function(){
     var base = {};
     (typeof rawRecords !== 'undefined' && rawRecords ? rawRecords : []).forEach(function(r){ base[r.id] = r; });
     (typeof lastRecords !== 'undefined' && lastRecords ? lastRecords : []).forEach(function(r){ if(!base[r.id]) base[r.id] = r; });
@@ -3967,7 +4202,10 @@
     if(ok2) logLineas(r, ttCodigo, t0, 'liberar', lineasLog);
   }
 
+  function puedeQuitarTT(){ return !!(currentSession && currentSession.rol === 'almacenista'); }
+
   async function quitarTT(r, ttCodigo){
+    if(!puedeQuitarTT()){ showToast('Solo el almacenista puede quitar un TT.'); return; }
     var ok = await customConfirm('¿Quitar el TT# '+ttCodigo+' de esta programación?');
     if(!ok) return;
     var t0 = findTT(r, ttCodigo);
@@ -4122,7 +4360,7 @@
           ttHtml += '<div class="tt-op-actions" data-tt="'+esc(tt.codigo)+'">'+
             (tt.estado === 'libre' && !ttEnZona(tt) ? '<button type="button" class="btn btn-sm btn-inicio-tt">'+(tt.etapa === 'retorno' ? 'Regresó (Inicio con TT)' : 'Inicio con TT')+'</button> ' : '')+
             (tt.estado === 'libre' && tt.etapa === 'retorno' ? '<button type="button" class="btn btn-sm btn-no-regresa-tt">No regresa</button> ' : '')+
-            '<button type="button" class="btn danger btn-sm btn-quitar-tt"'+(ocupado ? ' disabled title="Primero cancela el cargue, reversa o libera la carga para poder quitarlo"' : '')+'>Quitar TT</button>'+
+            (puedeQuitarTT() ? '<button type="button" class="btn danger btn-sm btn-quitar-tt"'+(ocupado ? ' disabled title="Primero cancela el cargue, reversa o libera la carga para poder quitarlo"' : '')+'>Quitar TT</button>' : '')+
           '</div>';
         }
         ttHtml += '</div>';
@@ -4161,9 +4399,9 @@
         var restante = it.restante != null ? it.restante : it.cantidad;
         var completo = Number(restante) <= 0;
         if(completo){
-          return '<div class="bl-row bl-completo"><span class="bl-name">Bl '+esc(it.bl)+'</span><span class="n">Cant. '+esc(it.cantidad)+'</span><span class="bl-completo-label">BL COMPLETO - SE TRASLADÓ</span></div>';
+          return '<div class="bl-row bl-completo"><span class="bl-name">'+blTxt(it.bl)+'</span><span class="n">Cant. '+esc(it.cantidad)+'</span><span class="bl-completo-label">BL COMPLETO - SE TRASLADÓ</span></div>';
         }
-        return '<div class="bl-row"><span class="bl-name">Bl '+esc(it.bl)+'</span><span class="n">Cant. '+esc(it.cantidad)+'</span><span class="n">Faltan '+esc(restante)+'</span></div>';
+        return '<div class="bl-row"><span class="bl-name">'+blTxt(it.bl)+'</span><span class="n">Cant. '+esc(it.cantidad)+'</span><span class="n">Faltan '+esc(restante)+'</span></div>';
       }).join('');
       itemsDiv.innerHTML =
         '<div class="tt-title collapsible-title"><span>BL y cantidad<span class="tt-count">'+(r.items||[]).length+'</span></span> <span class="chevron">&#9662;</span></div>'+
@@ -4192,7 +4430,7 @@
         var blRows = itemsConRestante.map(function(it){
           var restante = it.restante != null ? it.restante : it.cantidad;
           return '<div class="carga-bl-row" data-bl="'+esc(it.bl)+'" data-max="'+esc(restante)+'">'+
-            '<span class="carga-bl-name">Bl '+esc(it.bl)+' <small>&middot; faltan '+esc(restante)+'</small></span>'+
+            '<span class="carga-bl-name">'+blTxt(it.bl)+' <small>&middot; faltan '+esc(restante)+'</small></span>'+
             '<input type="text" inputmode="numeric" class="inp-carga-cant" placeholder="Máx. '+esc(restante)+'">'+
           '</div>';
         }).join('');
@@ -4257,7 +4495,7 @@
       var cargasHtml = '<div class="tt-title"><span>Cargas<span class="tt-count">'+ttsCargados.length+'</span></span></div>';
       ttsCargados.forEach(function(tt){
         var lineasHtml = ttLineas(tt).map(function(l){
-          return '<div>Bl '+esc(l.bl)+' - Cant. '+esc(l.cantidad)+'</div>';
+          return '<div>'+blTxt(l.bl)+' - Cant. '+esc(l.cantidad)+'</div>';
         }).join('');
         cargasHtml += '<div class="tt-programado-item" data-tt="'+esc(tt.codigo)+'">'+
           '<div class="info carga-lineas"><b>TT# '+esc(tt.codigo)+'</b>'+lineasHtml+
@@ -4341,7 +4579,6 @@
 
   var listAdminTrasladosEl = document.getElementById('listAdminTraslados');
 
-  var listAdministradorProgEl = document.getElementById('listAdministradorProg');
 
   var lastRecordsSig = null;
 
@@ -4403,10 +4640,10 @@
     lastRecords = records;
     hydrateAdminFromCurrent(records);
     if(typeof paintItemsProgramados === 'function') paintItemsProgramados();
+    if(typeof paintTTProgramados === 'function') paintTTProgramados();
     var saved = captureCargaState();
     renderList(listOpEl, records, {deletable:false, editableStatus:true});
     renderList(listVerEl, records, {deletable:false, editableStatus:false});
-    renderList(listAdministradorProgEl, records, {deletable:false, editableStatus:false});
     renderList(listAdminTrasladosEl, records, {deletable:true, editableStatus:false, editableRoute:true});
     if(typeof refreshEstaciones === 'function') refreshEstaciones();
     if(typeof renderAllFlujos === 'function') renderAllFlujos();
@@ -5684,38 +5921,32 @@
 
 
 
-  document.getElementById('btnRefreshAdministradorProg').addEventListener('click', function(){ onRecords(lastRecords, true); showToast('Actualizado.'); });
 
   var tabCapturarBtn = document.getElementById('tabCapturarBtn');
-  var tabProgramacionesBtn = document.getElementById('tabProgramacionesBtn');
   var tabCapturarContent = document.getElementById('tabCapturarContent');
-  var tabProgramacionesContent = document.getElementById('tabProgramacionesContent');
 
-  var tabFlujoAdminBtn = document.getElementById('tabFlujoAdminBtn');
-  var tabFlujoAdminContent = document.getElementById('tabFlujoAdminContent');
+  var tabFlujoAdminBtn = {classList:{toggle:function(){}},addEventListener:function(){}};
+  var tabFlujoAdminContent = {style:{}};
   function showAdminTab(tab){
     tabCapturarContent.style.display = tab === 'capturar' ? '' : 'none';
-    tabProgramacionesContent.style.display = tab === 'programaciones' ? '' : 'none';
     tabFlujoAdminContent.style.display = tab === 'flujo' ? '' : 'none';
     document.getElementById('tabComportamientoContent').style.display = tab === 'comportamiento' ? '' : 'none';
     document.getElementById('tabComportamientoBtn').classList.toggle('active', tab === 'comportamiento');
     if(tab === 'comportamiento' && compAdminM) compAdminM.run();
     tabCapturarBtn.classList.toggle('active', tab === 'capturar');
-    tabProgramacionesBtn.classList.toggle('active', tab === 'programaciones');
     tabFlujoAdminBtn.classList.toggle('active', tab === 'flujo');
     if(tab === 'flujo') renderAllFlujos();
   }
   tabCapturarBtn.addEventListener('click', function(){ showAdminTab('capturar'); });
-  tabProgramacionesBtn.addEventListener('click', function(){ showAdminTab('programaciones'); });
   tabFlujoAdminBtn.addEventListener('click', function(){ showAdminTab('flujo'); });
   document.getElementById('tabComportamientoBtn').addEventListener('click', function(){ showAdminTab('comportamiento'); });
   document.getElementById('btnRefreshVer').addEventListener('click', function(){ onRecords(lastRecords, true); showToast('Actualizado.'); });
 
   /* Pestañas de Operativo: Programaciones / Flujo */
   var tabOpProgramacionesBtn = document.getElementById('tabOpProgramacionesBtn');
-  var tabOpFlujoBtn = document.getElementById('tabOpFlujoBtn');
+  var tabOpFlujoBtn = {classList:{toggle:function(){}},addEventListener:function(){}};
   var tabOpProgramacionesContent = document.getElementById('tabOpProgramacionesContent');
-  var tabOpFlujoContent = document.getElementById('tabOpFlujoContent');
+  var tabOpFlujoContent = {style:{}};
   function showOpTab(tab){
     var esProg = tab === 'programaciones';
     tabOpProgramacionesContent.style.display = esProg ? '' : 'none';
@@ -5729,9 +5960,9 @@
 
   /* Pestañas de CBG3: CBG3 / Flujo */
   var tabCbg3ListaBtn = document.getElementById('tabCbg3ListaBtn');
-  var tabCbg3FlujoBtn = document.getElementById('tabCbg3FlujoBtn');
+  var tabCbg3FlujoBtn = {classList:{toggle:function(){}},addEventListener:function(){}};
   var tabCbg3ListaContent = document.getElementById('tabCbg3ListaContent');
-  var tabCbg3FlujoContent = document.getElementById('tabCbg3FlujoContent');
+  var tabCbg3FlujoContent = {style:{}};
   function showCbg3Tab(tab){
     var esLista = tab === 'lista';
     tabCbg3ListaContent.style.display = esLista ? '' : 'none';
@@ -5751,7 +5982,7 @@
   var viewCbg3 = document.getElementById('viewCbg3');
   var viewGestion = document.getElementById('viewGestion');
 
-  var ROL_LABEL = {admin:'Admin', administrador:'Administrador', operativo:'Operativo', ver:'Ver', puerta1:'Puerta 1', puerta2:'Puerta 2', cbg3:'CBG3'};
+  var ROL_LABEL = {admin:'Admin', administrador:'Administrador', operativo:'Operativo', almacenista:'Almacenista', ver:'Ver', puerta1:'Puerta 1', puerta2:'Puerta 2', cbg3:'CBG3'};
 
   var SESSION_KEY = 'spb_session_v1';
   var currentSession = null;
@@ -5779,7 +6010,7 @@
     viewGestion.style.display = 'none';
 
     if(rol === 'administrador') viewAdmin.style.display = 'block';
-    else if(rol === 'operativo') viewOp.style.display = 'block';
+    else if(rol === 'operativo' || rol === 'almacenista') viewOp.style.display = 'block';
     else if(rol === 'ver') viewVer.style.display = 'block';
     else if(rol === 'puerta1') viewPuerta1.style.display = 'block';
     else if(rol === 'puerta2') viewPuerta2.style.display = 'block';
@@ -5803,6 +6034,7 @@
     document.getElementById('sessionLabel').innerHTML =
       esc(session.nombre) + '<span class="rol-tag">'+esc(ROL_LABEL[session.rol]||session.rol)+'</span>';
     applyRole(session.rol);
+    if(typeof onRecords === 'function' && typeof rawRecords !== 'undefined') onRecords(rawRecords, true);
     if(typeof pintarSimPanels === 'function') pintarSimPanels();
 
     if(session.rol === 'admin' && typeof renderUsuariosList === 'function'){
@@ -6240,3 +6472,4 @@
 </script>
 </body>
 </html>
+
